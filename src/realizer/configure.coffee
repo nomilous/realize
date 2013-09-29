@@ -93,7 +93,7 @@ module.exports = configure =
 
             resolve opts: object, realizerFn: realzerFn
 
-        pipeline([
+        process.nextTick -> pipeline([
 
             (        ) -> validate()
             (        ) -> read()

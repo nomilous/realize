@@ -16,6 +16,9 @@ module.exports = configure =
         # 
         #       because objective may like to know why the realizer
         #       did not start (which error?)
+        # 
+        # TODO: allow selfsigned cert should not be defaulted to yes
+        #       (in notice)
         #
 
         validate = deferred ({resolve, reject}) ->
@@ -87,6 +90,7 @@ module.exports = configure =
                     object.connect.secret ?= ''
             
             delete object.realize
+
             resolve opts: object, realizerFn: realzerFn
 
         pipeline([

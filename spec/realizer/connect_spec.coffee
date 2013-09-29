@@ -4,5 +4,5 @@ describe 'connect', ->
 
     it 'is deferred', (done) -> 
 
-        connect().then.should.be.an.instanceof Function
+        connect({}).then.should.be.an.instanceof Function
         done()

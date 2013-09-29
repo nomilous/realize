@@ -208,6 +208,7 @@ describe 'run', ->
 
                         opts.uuid.should.equal 'UUID'
                         done()
+                        then: ->
 
                 return (title, realizerFn) -> 
                     then: ->

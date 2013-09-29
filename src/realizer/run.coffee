@@ -28,7 +28,12 @@ module.exports = run = deferred (action, controls) ->
 
         if opts.standalone then @token.on 'ready', => 
 
-            @token.run uuid: opts.uuid
+            @token.run( uuid: opts.uuid ).then(
+
+                (result) -> uplink.event 'result', result
+                (error) -> uplink.event 'error',  error
+
+            )
 
             
 

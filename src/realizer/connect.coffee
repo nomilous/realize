@@ -10,6 +10,7 @@ module.exports = connect = deferred (action, realizer) ->
     process.nextTick -> 
 
         unless opts.connect? 
+            opts.standalone = true
             return resolve
                 realizerFn: realizerFn
                 uplink: notice.create opts.uuid

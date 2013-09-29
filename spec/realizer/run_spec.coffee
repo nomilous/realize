@@ -169,3 +169,53 @@ describe 'run', ->
                             middleware message, ->
 
 
+    context.only 'standalone mode (-x)', -> 
+
+        it 'automatically loads the realizer phrase tree', (done) -> 
+
+            #
+            # by sending the load event that the objective 
+            # would normally send
+            #
+
+            phrase.createRoot = (opts, linkFn) -> 
+                return (title, realizerFn) -> 
+                    title.should.equal 'realizer'
+                    realizerFn().should.equal 'okgood'
+                    done()
+                    then: ->
+
+            run 
+                opts: 
+                    standalone: true
+                uplink: 
+                    use: ->
+                realizerFn: -> 'okgood'
+
+
+        it 'call to run from the phrase root on ready', (done) -> 
+
+            phrase.createRoot = (opts, linkFn) -> 
+
+                linkFn 
+                    on: (event, listener) -> 
+                        if event == 'ready' then listener()
+                    run: (opts) -> 
+
+                        #
+                        # it calls run with phrase uuid
+                        #
+
+                        opts.uuid.should.equal 'UUID'
+                        done()
+
+                return (title, realizerFn) -> 
+                    then: ->
+
+            run 
+                opts: 
+                    uuid: 'UUID'
+                    standalone: true
+                uplink: 
+                    use: ->
+                realizerFn: -> 'okgood'

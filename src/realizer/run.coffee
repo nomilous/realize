@@ -23,7 +23,14 @@ module.exports = run = deferred (action, controls) ->
 
     opts.notice    = uplink
     readyCount     = 0
+
     phraseRecursor = phrase.createRoot opts, (@token) => 
+
+        if opts.standalone then @token.on 'ready', => 
+
+            @token.run uuid: opts.uuid
+
+            
 
     load = -> 
 
@@ -37,6 +44,9 @@ module.exports = run = deferred (action, controls) ->
         # 
 
         return phraseRecursor 'realizer', realizerFn
+
+
+    if opts.standalone then return load()
 
 
     uplink.use (msg, next) => 
@@ -78,12 +88,12 @@ module.exports = run = deferred (action, controls) ->
 
                         load().then(
 
-                            (result) -> uplink.event.good "ready::#{++readyCount}"  # , result
+                            (result) -> uplink.event "ready::#{++readyCount}"  # , result
                             (error)  -> 
 
                                 payload = error: error.toString()
                                 try payload.stack = error.stack
-                                uplink.event.bad 'error', payload
+                                uplink.event 'error', payload
 
                             #(notify) -> console.log PHRASE_INIT_NOTIFY: notify
 
@@ -109,3 +119,4 @@ module.exports = run = deferred (action, controls) ->
                         return next()
 
                 next()
+

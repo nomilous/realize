@@ -32,7 +32,9 @@ describe 'connect', ->
 
             uplink.should.equal 'NOTICE'
             realizerFn().should.equal 'okgood'
-            opts.should.eql uuid: 'UUID'
+            opts.should.eql 
+                uuid: 'UUID'
+                standalone: true
             done()
 
     it 'starts a connected notifier with connect spec', (done) -> 
@@ -98,5 +100,14 @@ describe 'connect', ->
             error.message.should.equal 'connect error'
             done()
 
+    it 'sets opts.standalone if no connect spec', (done) -> 
 
+        notice.create = ->
+        connect
+            opts: 
+                uuid:'UUID'
+        .then ({opts}) -> 
+
+            opts.standalone.should.equal true
+            done()
 

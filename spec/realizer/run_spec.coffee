@@ -63,109 +63,109 @@ describe 'run', ->
                     should.exist message.hostname
                     done()
 
-        context 'inbound messages', -> 
+    context 'inbound messages', -> 
 
-            it 'rejects on reject', (done) -> 
+        it 'rejects on reject', (done) -> 
 
-                message = 
-                    direction: 'in'
-                    event: 'reject'
-                    reason: 'REASON'
-                    other: 'STUFF'
+            message = 
+                direction: 'in'
+                event: 'reject'
+                reason: 'REASON'
+                other: 'STUFF'
 
-                run 
-                    opts:       
-                        title: 'TITLE'
-                        uuid:  'UUID'
-                    realizerFn: ->
-                    uplink:     
-                        use: (middleware) ->  
-                            if middleware.toString().match /realizer middleware 1/
-                                middleware message, ->
+            run 
+                opts:       
+                    title: 'TITLE'
+                    uuid:  'UUID'
+                realizerFn: ->
+                uplink:     
+                    use: (middleware) ->  
+                        if middleware.toString().match /realizer middleware 1/
+                            middleware message, ->
 
-                .then(
-                    ->
-                    (error) -> 
+            .then(
+                ->
+                (error) -> 
 
-                        error.should.match /reject/
-                        error.code.should.equal 'ENO'
-                        error.errno.should.equal 107
-                        error.detail.reason.should.equal 'REASON'
+                    error.should.match /reject/
+                    error.code.should.equal 'ENO'
+                    error.errno.should.equal 107
+                    error.detail.reason.should.equal 'REASON'
+                    done()
+
+            )
+
+
+        it 'recurses the phrase tree on load', (done) -> 
+
+            message = 
+                direction: 'in'
+                event: 'load'
+
+            phrase.createRoot = (opts, linkFn) -> -> then: -> done()
+
+            run
+                opts:       
+                    title: 'TITLE'
+                    uuid:  'UUID'
+                realizerFn: -> 
+                uplink:     
+                    use: (middleware) ->  
+                        if middleware.toString().match /realizer middleware 1/
+                            middleware message, ->
+
+
+
+        it 'sends the ready::N on load completed', (done) -> 
+
+           message = 
+                direction: 'in'
+                event: 'load'
+
+            phrase.createRoot = (opts, linkFn) -> -> then: (resolve) -> resolve()
+
+            run
+                opts:       
+                    title: 'TITLE'
+                    uuid:  'UUID'
+                realizerFn: ->  
+                uplink:     
+                    use: (middleware) ->  
+                        if middleware.toString().match /realizer middleware 1/
+                            middleware message, ->
+                    event: good: (title) -> 
+                        title.should.equal 'ready::1'
                         done()
 
-                )
 
 
-            it 'recurses the phrase tree on load', (done) -> 
+        it 'calls a job into the phrase tree on run', (done) -> 
 
-                message = 
-                    direction: 'in'
-                    event: 'load'
+            message = 
+                direction: 'in'
+                event: 'run'
+                uuid:  'UUUUID'
+                params: 
+                    jobparameter: 1
 
-                phrase.createRoot = (opts, linkFn) -> -> then: -> done()
+            phrase.createRoot = (opts, linkFn) -> 
+                linkFn token = run: (opts, params) -> 
 
-                run
-                    opts:       
-                        title: 'TITLE'
-                        uuid:  'UUID'
-                    realizerFn: -> 
-                    uplink:     
-                        use: (middleware) ->  
-                            if middleware.toString().match /realizer middleware 1/
-                                middleware message, ->
+                    opts.uuid.should.equal 'UUUUID'
+                    params.should.eql jobparameter: 1
+                    done()
+                    then: ->
 
+                -> then: ->
 
-
-            it 'sends the ready::N on load completed', (done) -> 
-
-               message = 
-                    direction: 'in'
-                    event: 'load'
-
-                phrase.createRoot = (opts, linkFn) -> -> then: (resolve) -> resolve()
-
-                run
-                    opts:       
-                        title: 'TITLE'
-                        uuid:  'UUID'
-                    realizerFn: ->  
-                    uplink:     
-                        use: (middleware) ->  
-                            if middleware.toString().match /realizer middleware 1/
-                                middleware message, ->
-                        event: good: (title) -> 
-                            title.should.equal 'ready::1'
-                            done()
-
-
-
-            it 'calls a job into the phrase tree on run', (done) -> 
-
-                message = 
-                    direction: 'in'
-                    event: 'run'
-                    uuid:  'UUUUID'
-                    params: 
-                        jobparameter: 1
-
-                phrase.createRoot = (opts, linkFn) -> 
-                    linkFn token = run: (opts, params) -> 
-
-                        opts.uuid.should.equal 'UUUUID'
-                        params.should.eql jobparameter: 1
-                        done()
-                        then: ->
-
-                    -> then: ->
-
-                run
-                    opts:       
-                        title: 'TITLE'
-                        uuid:  'UUID'
-                    realizerFn: ->  
-                    uplink:     
-                        use: (middleware) ->  
-                            if middleware.toString().match /realizer middleware 1/
-                                middleware message, ->
+            run
+                opts:       
+                    title: 'TITLE'
+                    uuid:  'UUID'
+                realizerFn: ->  
+                uplink:     
+                    use: (middleware) ->  
+                        if middleware.toString().match /realizer middleware 1/
+                            middleware message, ->
 
 

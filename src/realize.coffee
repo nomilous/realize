@@ -1,8 +1,22 @@
 fs       = require 'fs'
 program  = require 'commander'
 pipeline = require 'when/pipeline'
+{load, connect, run} = require './realizer'
 
 module.exports = realize = 
+
+    exit: (error) ->
+
+        process.exit 0 unless error?
+        process.stderr.write error.toString()
+        process.exit error.errno || 100
+
+    error: (errno, code, message) -> 
+
+        error       = new Error message
+        error.errno = errno
+        error.code  = code
+        return error
 
     marshal: (program) -> 
 
@@ -23,25 +37,10 @@ module.exports = realize =
             port:     program.port
         }
 
-    exit: (error) ->
-
-        process.exit 0 unless error?
-        process.stderr.write error.toString()
-        process.exit error.errno || 100
-
-
-    withError: (errno, code, message) -> 
-
-        error       = new Error message
-        error.errno = errno
-        error.code  = code
-        return error
-
-    load:    -> 
-    connect: ->
-    run:     -> 
-        throw new Error 'moo'
-
+    load:    load
+    connect: connect
+    run:     run
+    
     exec: -> 
 
         pipeline([

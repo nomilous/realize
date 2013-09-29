@@ -1,6 +1,6 @@
 `npm install -g realize`
 
-#### Version 0.0.1 (unstable)
+#### Version 0.0.2 (unstable)
 
 realize
 =======

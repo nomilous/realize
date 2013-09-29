@@ -35,12 +35,18 @@ describe 'realize', ->
 
             realize.run = (controls) -> 
                 controls.should.equal 'CONTROLS'
-                throw new error 400, 'CODE', 'Error message'
+                throw new error 
+                    errno:    400
+                    code:    'CODE'
+                    message: 'Error message'
+                    detail:   
+                        other: 'stuff'
 
             realize.exit = (error) -> 
                 error.should.match /Error message/
                 error.errno.should.equal 400
                 error.code.should.equal 'CODE'
+                error.detail.should.eql other: 'stuff'
                 done()
 
             realize.exec()

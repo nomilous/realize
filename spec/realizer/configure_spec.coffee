@@ -11,3 +11,25 @@ describe 'configure', ->
 
         configure().then.should.be.an.instanceof Function
         done()
+
+    it 'rejects on unspecified realizer', (done) -> 
+
+        configure().then (->), (error) -> 
+
+            error.errno.should.equal 10001
+            error.message.should.match /No realizer specified/
+            error.code.should.equal 'ENOREALIZER'
+            done()
+        
+    it 'rejects on missing file', (done) -> 
+
+        configure
+
+            filename: 'missing.coffee'
+
+        .then (->), (error) -> 
+
+            error.code.should.equal 'ENOENT'
+            done()
+
+    

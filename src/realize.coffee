@@ -22,7 +22,7 @@ module.exports = realize =
         program.usage '[options]'
 
         program.option '-f, --file <filename>  ', 'Run realizer from file.'
-        program.option '-x, --no-objective     ', 'Run without connection to Objective.'
+        program.option '-x, --no-connect       ', 'Run without connection to Objective.', false
         program.option '-p, --port <num>       ', 'Connect to Objective at port.'
         program.option '-X, --no-https         ', 'Connect insecurely.', false
 
@@ -30,6 +30,7 @@ module.exports = realize =
 
         return {
             filename: program.file
+            connect:  program.connect
             https:    program.https
             port:     program.port
         }

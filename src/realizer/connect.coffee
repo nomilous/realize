@@ -1,5 +1,5 @@
 {deferred} = require 'also'
-{error}    = require './'
+error      = require './error'
 
 module.exports = connect = deferred (action, realizer) ->
 

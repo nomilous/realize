@@ -8,7 +8,7 @@ module.exports = configure =
     deferred (action, params = {}) ->
 
         {resolve, reject, notify} = action
-        {filename, connect, port} = params
+        {filename, connect, port, https} = params
 
         #
         # TODO: some of the steps done here would be more usefull
@@ -64,6 +64,7 @@ module.exports = configure =
             )
 
             realzerFn = object.realize
+
             if connect
                 return reject error(
                     errno:    105
@@ -76,9 +77,17 @@ module.exports = configure =
 
                 object.connect ||= {}
                 object.connect.port = port if port?
+                object.connect.hostname = hostname if hostname? 
+                object.connect.hostname  ||= 'localhost'
+                if https then object.connect.transport = 'https' 
+                else object.connect.transport ||= 'http' 
+                if process.env.REALIZER_SECRET? 
+                    object.connect.secret = process.env.REALIZER_SECRET
+                else
+                    object.connect.secret ?= ''
             
-            resolve object
-
+            delete object.realize
+            resolve opts: object, realizerFn: realzerFn
 
         pipeline([
 

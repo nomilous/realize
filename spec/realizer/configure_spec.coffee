@@ -157,9 +157,9 @@ describe 'configure', ->
             filename:  'missing.coffee'
             connect: true
 
-        .then (realizer) -> 
+        .then ({opts}) -> 
 
-            realizer.connect.port.should.equal 10101
+            opts.connect.port.should.equal 10101
             done()
 
     it 'will override from -p', (done) -> 
@@ -179,9 +179,80 @@ describe 'configure', ->
             filename:  'missing.coffee'
             connect: true
             port:    20202
+            https:   true
 
-        .then (realizer) -> 
+        .then ({opts}) -> 
 
-            realizer.connect.port.should.equal 20202
+            opts.connect.port.should.equal       20202
+            opts.connect.hostname.should.equal  'localhost'
+            opts.connect.transport.should.equal 'https'
+
+            done()
+
+
+    it 'will override secret from environment variable', (done) -> 
+
+        process.env.REALIZER_SECRET = '∑'
+
+        fs.readFile = (filename, encoding, callback) ->
+            if filename == 'missing.coffee'
+                callback null, """
+                    title: 'Title'
+                    uuid:  '1234234213123'
+                    connect: 
+                        port:   10101
+                        secret: 'x'
+                    realize: ->
+                """
+
+        configure 
+
+            filename:  'missing.coffee'
+            connect: true
+            port:    20202
+            https:   true
+
+        .then ({opts}) -> 
+
+            opts.connect.secret.should.equal '∑'
+            done()
+
+    it 'resolves with opts and realizerFn', (done) -> 
+
+        delete process.env.REALIZER_SECRET
+
+        fs.readFile = (filename, encoding, callback) ->
+            if filename == 'missing.coffee'
+                callback null, """
+                    title: 'Title'
+                    uuid:  '1234234213123'
+                    connect: 
+                        secret:    'x'
+                        port:      10101
+                        hostname:  'host.name'
+                        transport: 'https'
+
+                    realize: -> 'okgood'
+                """
+
+        configure 
+
+            filename:  'missing.coffee'
+            connect: true
+
+        .then ({opts, realizerFn}) -> 
+
+            opts.should.eql 
+
+                title: 'Title'
+                uuid: '1234234213123'
+                connect: 
+                    secret: 'x'
+                    port: 10101
+                    hostname: 'host.name'
+                    transport: 'https'
+
+            realizerFn().should.equal 'okgood'
+
             done()
 

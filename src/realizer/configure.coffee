@@ -26,7 +26,7 @@ module.exports = configure =
 
 
         compile = deferred ({resolve, reject}, source) -> 
-            try return resolve coffee.compile source, bare: true
+            try resolve coffee.compile source, bare: true
             catch err
                 reject error
                     errno:    10002
@@ -34,13 +34,24 @@ module.exports = configure =
                     message: err.toString()
                     detail:  location: err.location
 
+        interpret = deferred ({resolve, reject}, realizer) -> 
+            try resolve eval realizer
+            catch err
+                reject error
+                    errno:    10003
+                    code:    'ENOEVAL'
+                    message: err.toString()
+
+        marshal = deferred ({resolve, reject}, object) -> 
+
+            console.log object
+
         pipeline([
 
             (        ) -> validate()
             (        ) -> read()
-            ( source ) -> compile source
-            (realizer) -> 
-
-                console.log realizer
+            ( source ) -> compile   source
+            (realizer) -> interpret realizer
+            ( object ) -> marshal   object
 
         ]).then resolve, reject, notify

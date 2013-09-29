@@ -55,7 +55,7 @@ describe 'configure', ->
                 """
 
         configure 
-        
+
             filename: 'missing.coffee'
 
         .then (->), (error) -> 
@@ -70,4 +70,29 @@ describe 'configure', ->
                     last_line: 2
                     last_column: 6
             
+            done()
+
+    it 'evals', (done) -> 
+
+        fs.readFile = (filename, encoding, callback) ->
+
+            if filename == 'missing.coffee'
+
+                callback null, """
+
+                    ok: false
+                    test: 1
+                    missing()
+
+                """
+
+        configure 
+        
+            filename: 'missing.coffee'
+
+        .then (->), (error) -> 
+
+            error.message.should.equal 'ReferenceError: missing is not defined'
+            error.code.should.equal 'ENOEVAL'
+            error.errno.should.equal 10003
             done()

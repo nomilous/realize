@@ -10,6 +10,13 @@ module.exports = configure =
         {resolve, reject, notify} = action
         {filename} = params
 
+        #
+        # TODO: some of the steps done here would be more usefull
+        #       after connecting to objective, 
+        # 
+        #       because objective may like to know why the realizer
+        #       did not start (which error?)
+        #
 
         validate = deferred ({resolve, reject}) ->
             return resolve() if filename? 

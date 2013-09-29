@@ -1,4 +1,5 @@
 realize = require 'realize'
+{error} = require '../lib/realizer'
 
 describe 'realize', -> 
 
@@ -34,7 +35,7 @@ describe 'realize', ->
 
             realize.run = (controls) -> 
                 controls.should.equal 'CONTROLS'
-                throw new realize.error 400, 'CODE', 'Error message'
+                throw new error 400, 'CODE', 'Error message'
 
             realize.exit = (error) -> 
                 error.should.match /Error message/

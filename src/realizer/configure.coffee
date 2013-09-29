@@ -1,3 +1,5 @@
-module.exports = ->
+{error} = require './'
 
-    console.log configure: 1
+module.exports = (params) ->
+
+    console.log configure: params

@@ -11,13 +11,6 @@ module.exports = realize =
         process.stderr.write error.toString()
         process.exit error.errno || 100
 
-    error: (errno, code, message) -> 
-
-        error       = new Error message
-        error.errno = errno
-        error.code  = code
-        return error
-
     marshal: (program) -> 
 
         program.version JSON.parse( 
@@ -25,14 +18,17 @@ module.exports = realize =
             'utf8'
         ).version
 
-        program.usage '[options] [realizer]'
-        program.option '-p, --port  <num>      ', 'Connect to Objective at port'
-        program.option '-X, --no-https         ', 'Connect insecurely', false
+        program.usage '[options]'
+        
+        program.option '-f, --file <filename>  ', 'Run realizer from file.'
+        program.option '-x, --no-objective     ', 'Run without connection to Objective.'
+        program.option '-p, --port <num>       ', 'Connect to Objective at port.'
+        program.option '-X, --no-https         ', 'Connect insecurely.', false
+
         program.parse process.argv
 
         return {
-            filename: program.args[0]
-            connect:  true
+            filename: program.file
             https:    program.https
             port:     program.port
         }

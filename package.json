@@ -12,6 +12,7 @@
   "main": "lib/realize.js",
   "bin": "./bin/realize",
   "dependencies": {
+    "also": "0.0.12",
     "notice": "0.0.10",
     "commander": "~2.0.0",
     "coffee-script": "~1.6.3"

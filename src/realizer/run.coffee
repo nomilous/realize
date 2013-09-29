@@ -1,5 +1,6 @@
-{error} = require './'
+{deferred} = require 'also'
+{error}    = require './'
 
-module.exports = ->
+module.exports = run = deferred (action, controls) ->
 
-    console.log run: 1
+    

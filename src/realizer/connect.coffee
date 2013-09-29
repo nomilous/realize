@@ -1,5 +1,6 @@
-{error} = require './'
+{deferred} = require 'also'
+{error}    = require './'
 
-module.exports = ->
+module.exports = connect = deferred (action, realizer) ->
 
-    console.log connect: 1
+    action.resolve 'pending controls'

@@ -1,5 +1,6 @@
-{error} = require './'
+{deferred} = require 'also'
+{error}    = require './'
 
-module.exports = (params) ->
+module.exports = configure = deferred (action, params) ->
 
-    console.log configure: params
+    action.resolve 'pending realizer'

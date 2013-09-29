@@ -1,6 +1,7 @@
-fs       = require 'fs'
-program  = require 'commander'
-pipeline = require 'when/pipeline'
+fs          = require 'fs'
+program     = require 'commander'
+{pipeline}  = require 'also'
+
 {configure, connect, run} = require './realizer'
 
 module.exports = realize = 
@@ -19,7 +20,7 @@ module.exports = realize =
         ).version
 
         program.usage '[options]'
-        
+
         program.option '-f, --file <filename>  ', 'Run realizer from file.'
         program.option '-x, --no-objective     ', 'Run without connection to Objective.'
         program.option '-p, --port <num>       ', 'Connect to Objective at port.'

@@ -5,6 +5,6 @@
 realize
 =======
 
-**Realization** [phrase](https://github.com/nomilous/phrase) runner.<br />
-See also: [Objective](https://github.com/nomilous/objective)
+A realization [phrase](https://github.com/nomilous/phrase) runner.<br />
+See also: [objective](https://github.com/nomilous/objective)
 

@@ -26,7 +26,7 @@ describe 'configure', ->
 
             error.errno.should.equal 101
             error.message.should.match /No realizer specified/
-            error.code.should.equal 'ENOREALIZER'
+            error.code.should.equal 'ENOARG'
             done()
         
     it 'rejects on missing file', (done) -> 
@@ -96,3 +96,26 @@ describe 'configure', ->
             error.code.should.equal 'ENOEVAL'
             error.errno.should.equal 103
             done()
+
+    it 'rejects on missing title, uuid, realize()', (done) -> 
+
+        fs.readFile = (filename, encoding, callback) ->
+            if filename == 'missing.coffee'
+                callback null, """
+                    titel: 'Misspelled'
+                """
+        configure 
+        
+            filename: 'missing.coffee'
+
+        .then (->), (error) -> 
+
+            error.message.should.equal 'Realizer requires title, uuid and realize function'
+            error.code.should.equal 'ENOREALIZER'
+            error.errno.should.equal 104
+            done()
+
+
+
+
+

@@ -22,7 +22,7 @@ module.exports = configure =
             return resolve() if filename? 
             reject error
                 errno:    101
-                code:    'ENOREALIZER'
+                code:    'ENOARG'
                 message: 'No realizer specified. (-f <file>)'
 
 
@@ -51,7 +51,28 @@ module.exports = configure =
 
         marshal = deferred ({resolve, reject}, object) -> 
 
-            console.log object
+            reject error(
+
+                errno:   104
+                code:    'ENOREALIZER'
+                message: 'Realizer requires title, uuid and realize function'
+
+
+            ) unless (
+
+                object? and 
+                object.title? and typeof object.title is 'string' and
+                object.uuid? and typeof object.uuid is 'string' and
+                object.realize? and typeof object.realize is 'function'
+            )
+
+            # unless typeof realizer.realize is 'function'
+            #     return reject error
+            #         errno:    103
+            #         code:    'ENOFN'
+            #         message: 'Realizer missing realize()'
+
+
 
         pipeline([
 

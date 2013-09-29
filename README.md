@@ -13,7 +13,7 @@ A realization [phrase](https://github.com/nomilous/phrase) runner.<br />
 
 ```coffee
 
-title: 'Generic'
+title: 'Generic Realizer'
 uuid:  'universally unique identifier'
 realize: (step) -> 
 
@@ -59,6 +59,38 @@ realize: (step) ->
 ```
 
 **to run it** `realize -xf realizer.coffee` <br />
+
+### pending functionality
+
+```coffee
+
+title: 'Another Realizer'
+uuid:  'universally unique identifier too'
+
+realize: (step) -> 
+
+    step 'get records', (done, https) -> 
+
+        #
+        # use injected node module (https) to get stuff
+        # 
+
+        @records = ['array']
+        done()
+
+    step 'do some thing with them', (done, LocalModule) -> 
+
+        #
+        # CamelCase injections are loaded from local modules 
+        # 
+        #    ie. 'lib/local_module'
+        #
+
+        LocalModule.process record for record in @records
+        done()
+
+
+```
 <br />
 See also: [objective](https://github.com/nomilous/objective)
 

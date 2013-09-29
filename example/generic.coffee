@@ -2,7 +2,7 @@
 # ../bin/realize -xf generic.coffee
 #
 
-title: 'Generic'
+title: 'Generic Realizer'
 uuid:  'universally unique identifier'
 
 realize: (step) -> 

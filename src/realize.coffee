@@ -1,7 +1,7 @@
 fs       = require 'fs'
 program  = require 'commander'
 pipeline = require 'when/pipeline'
-{load, connect, run} = require './realizer'
+{configure, connect, run} = require './realizer'
 
 module.exports = realize = 
 
@@ -37,18 +37,18 @@ module.exports = realize =
             port:     program.port
         }
 
-    load:    load
+    configure: configure
     connect: connect
-    run:     run
+    run: run
     
     exec: -> 
 
         pipeline([
 
-            (        ) -> realize.marshal program
-            ( params ) -> realize.load    params
-            (realizer) -> realize.connect realizer
-            (controls) -> realize.run     controls
+            (        ) -> realize.marshal   program
+            ( params ) -> realize.configure params
+            (realizer) -> realize.connect   realizer
+            (controls) -> realize.run       controls
 
         ]).then(
 

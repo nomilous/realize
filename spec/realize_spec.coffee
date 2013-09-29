@@ -3,18 +3,18 @@ realize = require 'realize'
 describe 'realize', -> 
 
     beforeEach -> 
-        @marshal = realize.marshal
-        @load    = realize.load
-        @connect = realize.connect
-        @run     = realize.run
-        @exit    = realize.exit 
+        @marshal   = realize.marshal
+        @configure = realize.load
+        @connect   = realize.connect
+        @run       = realize.run
+        @exit      = realize.exit 
 
     afterEach -> 
-        realize.marshal = @marshal
-        realize.load    = @load
-        realize.connect = @connect
-        realize.run     = @run
-        realize.exit    = @exit
+        realize.marshal   = @marshal
+        realize.configure = @configure
+        realize.connect   = @connect
+        realize.run       = @run
+        realize.exit      = @exit
 
 
     context 'exec()', -> 
@@ -24,7 +24,7 @@ describe 'realize', ->
             realize.marshal = ->    
                 return 'PARAMETERS'
 
-            realize.load = (parameters) -> 
+            realize.configure = (parameters) -> 
                 parameters.should.equal 'PARAMETERS'
                 return 'REALIZER'
 

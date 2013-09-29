@@ -139,3 +139,30 @@ describe 'run', ->
 
 
 
+            it 'calls a job into the phrase tree on run', (done) -> 
+
+                message = 
+                    direction: 'in'
+                    event: 'run'
+                    uuid:  'UUUUID'
+
+                phrase.createRoot = (opts, linkFn) -> 
+                    linkFn token = run: (opts) -> 
+
+                        opts.uuid.should.equal 'UUUUID'
+                        done()
+                        then: ->
+
+                    -> then: ->
+
+                run
+                    opts:       
+                        title: 'TITLE'
+                        uuid:  'UUID'
+                    realizerFn: ->  
+                    uplink:     
+                        use: (middleware) ->  
+                            if middleware.toString().match /realizer middleware 1/
+                                middleware message, ->
+
+

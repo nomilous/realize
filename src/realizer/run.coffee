@@ -57,7 +57,7 @@ module.exports = run = deferred (action, controls) ->
                 console.log SENDING: msg.context, msg
                 next()
 
-            when 'in' 
+            when 'in'
 
                 console.log RECEIVING: msg.context, msg
                 switch msg.event
@@ -88,6 +88,24 @@ module.exports = run = deferred (action, controls) ->
                             #(notify) -> console.log PHRASE_INIT_NOTIFY: notify
 
                         )
+                        return next()
+
+                    when 'run'
+
+                        return next() unless uuid = msg.uuid
+                        job    = uuid: uuid
+                        params = msg.params || {}
+
+                        console.log RUN: uuid
+                        console.log TODO: 'job.run() with optional input of JobUUID'
+                        
+                        @token.run( job, params ).then( 
+
+                            (result) -> console.log JOB_RESULT: result
+                            (error)  -> console.log JOB_ERROR:  error
+
+                        )
+
                         return next()
 
                 next()

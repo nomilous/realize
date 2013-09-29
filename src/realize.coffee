@@ -4,7 +4,7 @@ pipeline = require 'when/pipeline'
 
 module.exports = realize = 
 
-    marshalArgs: (program) -> 
+    marshal: (program) -> 
 
         program.version JSON.parse( 
             fs.readFileSync __dirname + '/../package.json'
@@ -35,12 +35,18 @@ module.exports = realize =
         error.code  = code
         return error
 
+    load:    -> 
+    connect: ->
+    run:     -> 
+
     exec: -> 
 
         pipeline([
 
-            (        ) -> realize.marshalArgs program
-            ( params ) -> 
+            (        ) -> realize.marshal program
+            ( params ) -> realize.load    params
+            (realizer) -> realize.connect realizer
+            (controls) -> realize.run     controls
 
         ]).then(
 

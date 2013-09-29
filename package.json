@@ -16,7 +16,7 @@
     "notice": "0.0.10",
     "commander": "~2.0.0",
     "coffee-script": "~1.6.3",
-    "phrase": "0.0.3"
+    "phrase": "0.0.4"
   },
   "devDependencies": {
     "hound": "~1.0.4",

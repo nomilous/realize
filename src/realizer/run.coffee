@@ -48,6 +48,10 @@ module.exports = run = deferred (action, controls) ->
 
     if opts.standalone then return load()
 
+        #
+        # TODO: error to console if phrase falied to load
+        #
+
 
     uplink.use (msg, next) => 
 
@@ -88,12 +92,12 @@ module.exports = run = deferred (action, controls) ->
 
                         load().then(
 
-                            (result) -> uplink.event "ready::#{++readyCount}"  # , result
+                            (result) -> uplink.event.good "ready::#{++readyCount}"  # , result
                             (error)  -> 
 
                                 payload = error: error.toString()
                                 try payload.stack = error.stack
-                                uplink.event 'error', payload
+                                uplink.event.bad 'error', payload
 
                             #(notify) -> console.log PHRASE_INIT_NOTIFY: notify
 

@@ -6,4 +6,8 @@ title: 'Generic'
 uuid:  'universally unique identifier'
 realize: (step) -> 
 
-    step 'one', (end) -> end()
+    step 'one', (end) -> 
+
+
+        console.log run: 1
+        end()

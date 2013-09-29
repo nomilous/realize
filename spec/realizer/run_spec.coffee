@@ -169,7 +169,7 @@ describe 'run', ->
                             middleware message, ->
 
 
-    context.only 'standalone mode (-x)', -> 
+    context 'standalone mode (-x)', -> 
 
         it 'automatically loads the realizer phrase tree', (done) -> 
 

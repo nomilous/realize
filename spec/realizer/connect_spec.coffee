@@ -77,3 +77,26 @@ describe 'connect', ->
                 other:  
                     stuff: 'also'
             realizerFn: -> 'okgood'
+
+    it 'rejects on notice connect error', (done) -> 
+
+        notice.connect = (originName, opts, callback) -> 
+
+            callback new Error 'connect error'
+
+        connect
+            opts: 
+                uuid:'UUID'
+                connect: 
+                    port: 10101
+            realizerFn: -> 'okgood'
+
+        .then (->), (error) -> 
+
+            error.errno.should.equal 106
+            error.code.should.equal 'ENOUPLINK'
+            error.message.should.equal 'connect error'
+            done()
+
+
+

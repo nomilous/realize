@@ -24,6 +24,11 @@ module.exports = connect = deferred (action, realizer) ->
         opts.origin = origin
 
         notice.connect opts.uuid, opts, (err, uplink) -> 
+
+            if err? then return reject error 
+                errno:   err.errno || 106
+                code:    err.code || 'ENOUPLINK'
+                message: err.message
                 
             resolve
                 realizerFn: realizerFn

@@ -145,11 +145,14 @@ describe 'run', ->
                     direction: 'in'
                     event: 'run'
                     uuid:  'UUUUID'
+                    params: 
+                        jobparameter: 1
 
                 phrase.createRoot = (opts, linkFn) -> 
-                    linkFn token = run: (opts) -> 
+                    linkFn token = run: (opts, params) -> 
 
                         opts.uuid.should.equal 'UUUUID'
+                        params.should.eql jobparameter: 1
                         done()
                         then: ->
 

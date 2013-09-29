@@ -6,13 +6,15 @@ describe 'realize', ->
         @marshal = realize.marshal
         @load    = realize.load
         @connect = realize.connect
-        @run     = realize.run 
+        @run     = realize.run
+        @exit    = realize.exit 
 
     afterEach -> 
         realize.marshal = @marshal
         realize.load    = @load
         realize.connect = @connect
         realize.run     = @run
+        realize.exit    = @exit
 
 
     context 'exec()', -> 
@@ -32,7 +34,13 @@ describe 'realize', ->
 
             realize.run = (controls) -> 
                 controls.should.equal 'CONTROLS'
+                throw new realize.withError 400, 'CODE', 'Error message'
 
-            realize.exec().then done
+            realize.exit = (error) -> 
+                error.should.match /Error message/
+                error.errno.should.equal 400
+                error.code.should.equal 'CODE'
+                done()
 
+            realize.exec()
 

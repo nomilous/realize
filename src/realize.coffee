@@ -23,10 +23,12 @@ module.exports = realize =
             port:     program.port
         }
 
-    exitWithError: (error) ->
+    exit: (error) ->
 
+        process.exit 0 unless error?
         process.stderr.write error.toString()
         process.exit error.errno || 100
+
 
     withError: (errno, code, message) -> 
 
@@ -38,6 +40,7 @@ module.exports = realize =
     load:    -> 
     connect: ->
     run:     -> 
+        throw new Error 'moo'
 
     exec: -> 
 
@@ -51,7 +54,7 @@ module.exports = realize =
         ]).then(
 
             (resolve) ->
-            realize.exitWithError
+            realize.exit
             (notify)  ->
 
         )

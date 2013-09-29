@@ -11,7 +11,9 @@
   ],
   "main": "lib/realize.js",
   "bin": "./bin/realize",
-  "dependencies": {},
+  "dependencies": {
+    "notice": "0.0.10"
+  },
   "devDependencies": {
     "hound": "~1.0.4",
     "should": "~1.3.0",

@@ -35,3 +35,45 @@ describe 'connect', ->
             opts.should.eql uuid: 'UUID'
             done()
 
+    it 'starts a connected notifier with connect spec', (done) -> 
+
+        notice.connect = (originName, opts, callback) -> 
+
+            callback null, 'NOTICE'
+
+        connect
+            opts: 
+                uuid:'UUID'
+                connect: 
+                    port: 10101
+            realizerFn: -> 'okgood'
+
+        .then ({uplink, opts, realizerFn}) -> 
+
+            uplink.should.equal 'NOTICE'
+            realizerFn().should.equal 'okgood'
+            done()
+
+
+    it 'sets notice origin context with the realizer properties', (done) -> 
+
+        notice.connect = (originName, {origin}, callback) -> 
+
+            origin.should.eql
+                title: 'Title'
+                uuid: 'UUID'
+                description: 'Description'
+                other: 
+                    stuff: 'also'
+            done()
+
+        connect
+            opts: 
+                title: 'Title'
+                uuid: 'UUID'
+                connect: 
+                    port: 10101
+                description: 'Description'
+                other:  
+                    stuff: 'also'
+            realizerFn: -> 'okgood'

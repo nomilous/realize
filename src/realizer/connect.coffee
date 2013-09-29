@@ -14,5 +14,18 @@ module.exports = connect = deferred (action, realizer) ->
                 realizerFn: realizerFn
                 uplink: notice.create opts.uuid
                 opts: opts
+
+        opts.connect.address = opts.connect.hostname
+
+        origin = {}
+        for key of opts
+            continue if key == 'connect'
+            origin[key] = opts[key]
+        opts.origin = origin
+
+        notice.connect opts.uuid, opts, (err, uplink) -> 
                 
-        
+            resolve
+                realizerFn: realizerFn
+                uplink: uplink
+                opts: opts

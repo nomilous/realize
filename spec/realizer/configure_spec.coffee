@@ -24,7 +24,7 @@ describe 'configure', ->
 
         configure().then (->), (error) -> 
 
-            error.errno.should.equal 10001
+            error.errno.should.equal 101
             error.message.should.match /No realizer specified/
             error.code.should.equal 'ENOREALIZER'
             done()
@@ -62,7 +62,7 @@ describe 'configure', ->
 
             error.message.should.equal 'SyntaxError: unexpected end of input'
             error.code.should.equal 'ENOCOMPILE'
-            error.errno.should.equal 10002
+            error.errno.should.equal 102
             error.detail.should.eql 
                 location: 
                     first_line: 2
@@ -94,5 +94,5 @@ describe 'configure', ->
 
             error.message.should.equal 'ReferenceError: missing is not defined'
             error.code.should.equal 'ENOEVAL'
-            error.errno.should.equal 10003
+            error.errno.should.equal 103
             done()

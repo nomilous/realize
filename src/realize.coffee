@@ -10,7 +10,10 @@ module.exports = realize =
 
         process.exit 0 unless error?
         process.stderr.write error.toString()
-        process.exit error.errno || 100
+        errno = error.errno
+        console.log ERRNO: errno
+        #errno ?= 100
+        process.exit errno
 
     marshal: (program) -> 
 

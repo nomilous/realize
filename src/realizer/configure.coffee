@@ -14,7 +14,7 @@ module.exports = configure =
         validate = deferred ({resolve, reject}) ->
             return resolve() if filename? 
             reject error
-                errno:    10001
+                errno:    101
                 code:    'ENOREALIZER'
                 message: 'No realizer specified. (-f <file>)'
 
@@ -29,7 +29,7 @@ module.exports = configure =
             try resolve coffee.compile source, bare: true
             catch err
                 reject error
-                    errno:    10002
+                    errno:    102
                     code:    'ENOCOMPILE'
                     message: err.toString()
                     detail:  location: err.location
@@ -38,7 +38,7 @@ module.exports = configure =
             try resolve eval realizer
             catch err
                 reject error
-                    errno:    10003
+                    errno:    103
                     code:    'ENOEVAL'
                     message: err.toString()
 

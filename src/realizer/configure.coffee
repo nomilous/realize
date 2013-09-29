@@ -84,8 +84,8 @@ module.exports = configure =
                 object.connect.hostname  ||= 'localhost'
                 if https then object.connect.transport = 'https' 
                 else object.connect.transport ||= 'http' 
-                if process.env.REALIZER_SECRET? 
-                    object.connect.secret = process.env.REALIZER_SECRET
+                if process.env.SECRET? 
+                    object.connect.secret = process.env.SECRET
                 else
                     object.connect.secret ?= ''
             

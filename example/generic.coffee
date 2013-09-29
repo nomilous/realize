@@ -4,4 +4,7 @@
 
 title: 'Generic'
 uuid:  'universally unique identifier'
+connect: 
+    port: 10101
 realize: -> 
+    

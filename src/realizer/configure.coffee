@@ -8,7 +8,7 @@ module.exports = configure =
     deferred (action, params = {}) ->
 
         {resolve, reject, notify} = action
-        {filename} = params
+        {filename, connect, port} = params
 
         #
         # TODO: some of the steps done here would be more usefull
@@ -41,6 +41,7 @@ module.exports = configure =
                     message: err.toString()
                     detail:  location: err.location
 
+
         interpret = deferred ({resolve, reject}, realizer) -> 
             try resolve eval realizer
             catch err
@@ -49,29 +50,34 @@ module.exports = configure =
                     code:    'ENOEVAL'
                     message: err.toString()
 
+
         marshal = deferred ({resolve, reject}, object) -> 
-
-            reject error(
-
-                errno:   104
+            return reject error(
+                errno:    104
                 code:    'ENOREALIZER'
                 message: 'Realizer requires title, uuid and realize function'
-
-
             ) unless (
-
-                object? and 
+                object? and
                 object.title? and typeof object.title is 'string' and
                 object.uuid? and typeof object.uuid is 'string' and
-                object.realize? and typeof object.realize is 'function'
+                object.realize? and typeof object.realize and 'function'
             )
 
-            # unless typeof realizer.realize is 'function'
-            #     return reject error
-            #         errno:    103
-            #         code:    'ENOFN'
-            #         message: 'Realizer missing realize()'
+            realzerFn = object.realize
+            if connect
+                return reject error(
+                    errno:    105
+                    code:    'ENOPORT'
+                    message: 'Realizer requires port'
+                    suggest: 'use -p nnnn or realizer.connect.port'
+                ) unless port? or (
+                    object.connect? and object.connect.port? 
+                )
 
+                object.connect ||= {}
+                object.connect.port = port if port?
+            
+            resolve object
 
 
         pipeline([

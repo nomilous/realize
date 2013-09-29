@@ -116,6 +116,72 @@ describe 'configure', ->
             done()
 
 
+    it 'rejects on missing port if connect is enabled', (done) -> 
+
+        fs.readFile = (filename, encoding, callback) ->
+            if filename == 'missing.coffee'
+                callback null, """
+                    title: 'Title'
+                    uuid:  '1234234213123'
+                    realize: ->
+                """
+
+        configure 
+
+            filename:  'missing.coffee'
+            connect: true
+
+        .then (->), (error) -> 
+
+            error.code.should.equal 'ENOPORT'
+            error.errno.should.equal 105
+            error.message.should.match /Realizer requires port/
+            done()
 
 
+
+    it 'will use port from realizer.connect', (done) -> 
+
+        fs.readFile = (filename, encoding, callback) ->
+            if filename == 'missing.coffee'
+                callback null, """
+                    title: 'Title'
+                    uuid:  '1234234213123'
+                    connect: 
+                        port: 10101
+                    realize: ->
+                """
+
+        configure 
+
+            filename:  'missing.coffee'
+            connect: true
+
+        .then (realizer) -> 
+
+            realizer.connect.port.should.equal 10101
+            done()
+
+    it 'will override from -p', (done) -> 
+
+        fs.readFile = (filename, encoding, callback) ->
+            if filename == 'missing.coffee'
+                callback null, """
+                    title: 'Title'
+                    uuid:  '1234234213123'
+                    connect: 
+                        port: 10101
+                    realize: ->
+                """
+
+        configure 
+
+            filename:  'missing.coffee'
+            connect: true
+            port:    20202
+
+        .then (realizer) -> 
+
+            realizer.connect.port.should.equal 20202
+            done()
 

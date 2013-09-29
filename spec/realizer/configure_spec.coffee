@@ -1,6 +1,14 @@
 configure = require '../../lib/realizer/configure'
+fs = require 'fs'
 
 describe 'configure', -> 
+
+    beforeEach -> 
+        @read = fs.readFile
+
+    afterEach -> 
+        fs.readFile = @read
+
 
     it 'is deferred', (done) -> 
 
@@ -32,4 +40,34 @@ describe 'configure', ->
             error.code.should.equal 'ENOENT'
             done()
 
-    
+
+    it 'compiles', (done) -> 
+
+        fs.readFile = (filename, encoding, callback) ->
+
+            if filename == 'missing.coffee'
+
+                callback null, """
+
+                    ok = false
+                    test =
+
+                """
+
+        configure 
+        
+            filename: 'missing.coffee'
+
+        .then (->), (error) -> 
+
+            error.message.should.equal 'SyntaxError: unexpected end of input'
+            error.code.should.equal 'ENOCOMPILE'
+            error.errno.should.equal 10002
+            error.detail.should.eql 
+                location: 
+                    first_line: 2
+                    first_column: 6
+                    last_line: 2
+                    last_column: 6
+            
+            done()

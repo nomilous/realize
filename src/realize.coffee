@@ -55,3 +55,6 @@ module.exports = realize =
             (notify)  ->
 
         )
+
+
+module.exports.configure = configure

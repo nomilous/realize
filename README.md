@@ -5,7 +5,7 @@
 realize
 =======
 
-A realization [phrase](https://github.com/nomilous/phrase) runner.<br />
+An actualizer.
 
 ### example
 
@@ -14,7 +14,7 @@ A realization [phrase](https://github.com/nomilous/phrase) runner.<br />
 ```coffee
 
 title: 'Generic Realizer'
-uuid:  'universally unique identifier'
+uuid:  'universally unique identifier for boring example that needs attention'
 realize: (step) -> 
 
     before all: ->

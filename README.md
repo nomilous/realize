@@ -44,7 +44,7 @@ realize: (roll) ->
 
 ```
 
-**to run it** `realize -xf realizer.coffee` <br />
+**to run it** `realize -xf jack_and_jill.coffee` <br />
 
 
 

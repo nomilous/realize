@@ -29,9 +29,6 @@ realize: (roll) ->
     roll 'up the hill', (to) -> 
 
         to 'fetch a pail of water', (done, also) -> 
-                                            #
-                                            # todo: node module injection
-                                            #
 
             also.pipeline([
 

@@ -7,86 +7,62 @@ A realization [phrase](https://github.com/nomilous/phrase) runner.<br />
 
 ### example
 
-**the realizer file** `realizer.coffee`
+**the realizer file** `jack_and_jill.coffee`
 
 ```coffee
 
-title: 'Generic Realizer'
-uuid:  'universally unique identifier'
-realize: (step) -> 
+title: 'Fetch a Pail of Water'
+uuid:  '8a618c00-31e4-11e3-94c8-11feca0da255'
+realize: (roll) -> 
 
-    before all: ->
-        @count = 0
-        @notice.use (msg, next) -> 
+    before each: (done) -> 
+
+        #
+        # integrated middleware message bus
+        # 
+
+        @notice.person 'Jill', (err, @Jill) => done()
+        
+
+
+    roll 'up the hill', (to) -> 
+
+        to 'fetch a pail of water', (done) -> 
 
             #
-            # integrated middleware message bus
+            # * this is a leaf `phrase` because it has `done` at arg1
+            # 
+            # * this, a.k.a @ (context) is shared across all hooks and phrases
             # 
 
-            if msg.event.match /^run::/
-                console.log msg.event, msg.progress
-                return next()
-            
-            console.log msg.event, msg
-            next()
-            
+            pipeline([
 
-    before each: -> 
+                => @notice.event 'fall down'
+                => @notice.event 'break crown'
 
-        @count++
-
-        #
-        # @ (this) - References to the running `job` context
-        #            in all `hooks` and `phrases`.
-        #
-
-
-    step 'A', (done) -> @arbitraryResult = 42; done()
-    step 'B', (done) -> done()
-    step 'C', (done) -> 
-
-        #
-        # this is a `phrase`, it has access to 
-        # the message bus
-        #
-
-        @notice.event 'RUNNING step C', count: @count
-        done()
+            ]).then => @Jill.tumbleAfter -> done()
 
 
 ```
 
 **to run it** `realize -xf realizer.coffee` <br />
 
+
+
 ### pending functionality
 
 ```coffee
 
-title: 'Another Realizer'
-uuid:  'universally unique identifier too'
+title: 'Fetch a Pail of Water'
+uuid:  '8a618c00-31e4-11e3-94c8-11feca0da255'
 
-realize: (step) -> 
+realize: (roll) -> 
 
-    step 'get records', (done, https) -> 
+    roll 'up the hill', (to, jill) -> 
 
         #
-        # use injected node module (https) to get stuff
+        # dynamically inject jill as node_module
         # 
-
-        @records = ['array']
-        done()
-
-    step 'do some thing with them', (done, LocalModule) -> 
-
-        #
-        # CamelCase injections are loaded from local modules 
-        # 
-        #    ie. 'lib/local_module'
-        #
-
-        LocalModule.process record for record in @records
-        done()
-
 
 ```
 <br />

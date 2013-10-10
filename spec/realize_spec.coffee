@@ -1,4 +1,4 @@
-realize = require 'realize'
+realize = require '../lib/realize'
 {error} = require '../lib/realizer'
 
 describe 'realize', -> 

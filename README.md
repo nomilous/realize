@@ -1,6 +1,6 @@
-`npm install -g realize`
+TODO!!!: de-nest notice 
 
-#### Version 0.0.2 (unstable)
+`npm install -g realize` 0.0.3 [license](./license)
 
 realize
 =======

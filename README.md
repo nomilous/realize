@@ -3,7 +3,7 @@
 realize
 =======
 
-A realization [phrase](https://github.com/nomilous/phrase) runner.<br />
+An actualizer. <br />
 
 ### example
 
@@ -22,6 +22,7 @@ realize: (roll) ->
         # 
 
         @notice.find 'Jill', (err, @Jill) => done()
+        @fter = 500
         
 
 
@@ -36,10 +37,12 @@ realize: (roll) ->
 
             pipeline([
 
-                => @notice.event 'fall down'
-                => @notice.event 'break crown'
+                => @notice.alert 'fell down'
+                => @notice.alert 'broke crown'
 
-            ]).then => @Jill.tumbleAfter -> done()
+            ]).then => 
+
+                setTimeout @Jill.tumbling, @fter
 
 
 ```

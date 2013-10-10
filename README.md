@@ -1,5 +1,3 @@
-TODO!!!: de-nest notice 
-
 `npm install -g realize` 0.0.3 [license](./license)
 
 realize

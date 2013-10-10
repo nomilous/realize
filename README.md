@@ -30,7 +30,7 @@ realize: (roll) ->
         to 'fetch a pail of water', (done) -> 
 
             #
-            # * this is a leaf `phrase` because it has `done` at arg
+            # * this is a leaf `phrase` because it has `done` at arg1
             # * `this`, a.k.a @ (context) is shared across all hooks and phrases
             # 
 

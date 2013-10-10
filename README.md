@@ -15,7 +15,7 @@ title: 'Fetch a Pail of Water'
 uuid:  '8a618c00-31e4-11e3-94c8-11feca0da255'
 realize: (roll) -> 
 
-    before each: (done) -> 
+    before all: (done) -> 
 
         #
         # integrated middleware message bus

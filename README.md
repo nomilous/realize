@@ -28,14 +28,12 @@ realize: (roll) ->
 
     roll 'up the hill', (to) -> 
 
-        to 'fetch a pail of water', (done) -> 
+        to 'fetch a pail of water', (done, also) -> 
+                                            #
+                                            # todo: node module injection
+                                            #
 
-            #
-            # * this is a leaf `phrase` because it has `done` at arg1
-            # * `this`, a.k.a @ (context) is shared across all hooks and phrases
-            # 
-
-            pipeline([
+            also.pipeline([
 
                 => @notice.alert 'fell down'
                 => @notice.alert 'broke crown'
@@ -48,25 +46,6 @@ realize: (roll) ->
 ```
 
 **to run it** `realize -xf jack_and_jill.coffee` <br />
-
-
-
-### pending functionality
-
-```coffee
-
-title: 'Fetch a Pail of Water'
-uuid:  '8a618c00-31e4-11e3-94c8-11feca0da255'
-
-realize: (roll) -> 
-
-    roll 'up the hill', (to, jill) -> 
-
-        #
-        # dynamically inject jill as node_module
-        # 
-
-```
 <br />
 See also: [objective](https://github.com/nomilous/objective)
 

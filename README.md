@@ -21,7 +21,7 @@ realize: (roll) ->
         # integrated middleware message bus
         # 
 
-        @notice.person 'Jill', (err, @Jill) => done()
+        @notice.find 'Jill', (err, @Jill) => done()
         
 
 

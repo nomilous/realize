@@ -15,7 +15,7 @@
       "packageManager": "npm",
       "remote.origin.url": "git@github.com:nomilous/phrase.git",
       "HEAD": "refs/heads/develop",
-      "version": "011b34ec703f8c7b296c9a2df3c8be175cb8ec30"
+      "version": "568b01985ff412ea1c2fe14a8a114bd0eb1f67d3"
     },
     {
       "root": false,
@@ -23,7 +23,7 @@
       "packageManager": "npm",
       "remote.origin.url": "git@github.com:nomilous/notice.git",
       "HEAD": "refs/heads/develop",
-      "version": "c81f68e61efed14e1a005d4c63658ba66f81931f"
+      "version": "b577bccec7935e81551741fea9ba9556a1fc28a1"
     }
   ]
 }

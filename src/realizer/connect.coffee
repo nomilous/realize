@@ -9,11 +9,14 @@ module.exports = connect = deferred (action, realizer) ->
 
     process.nextTick -> 
 
+        noticeConfig = capsule: opts.capsules || {}
+        noticeConfig.capsule.event ||= {}
+
         unless opts.connect? 
             opts.standalone = true
             return resolve
                 realizerFn: realizerFn
-                uplink: notice.create opts.uuid
+                uplink: notice( noticeConfig ).create opts.uuid
                 opts: opts
 
         opts.connect.address = opts.connect.hostname

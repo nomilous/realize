@@ -1,5 +1,6 @@
 connect = require '../../lib/realizer/connect'
 notice  = require 'notice'
+should  = require 'should'
 
 describe 'connect', -> 
 
@@ -21,8 +22,6 @@ describe 'connect', ->
 
     it 'starts standalone notifier if no connect spec', (done) ->
 
-        notice.create = -> 'NOTICE'
-
         connect
 
             opts: uuid: 'UUID'
@@ -30,12 +29,36 @@ describe 'connect', ->
 
         .then ({uplink, opts, realizerFn}) -> 
 
-            uplink.should.equal 'NOTICE'
+            uplink.use.should.be.an.instanceof Function
             realizerFn().should.equal 'okgood'
             opts.should.eql 
                 uuid: 'UUID'
                 standalone: true
             done()
+
+    it 'allows definition of additional capsules', (done) -> 
+
+        connect
+            opts: 
+                uuid: 'UUID'
+                capsules: 
+                    flotsam:  {} 
+                    jetsum:   {}
+                    lagan:    {}
+                    derelict: {}
+            realizerFn: -> 
+
+        .then ({uplink}) -> 
+
+            uplink.flotsam .should.be.an.instanceof Function
+            uplink.jetsum  .should.be.an.instanceof Function
+            uplink.lagan   .should.be.an.instanceof Function
+            uplink.derelict.should.be.an.instanceof Function
+
+            uplink.event   .should.be.an.instanceof Function
+            done()
+
+
 
     it 'starts a connected notifier with connect spec', (done) -> 
 

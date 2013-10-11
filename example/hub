@@ -1,0 +1,16 @@
+#! /usr/bin/env coffee
+
+Hub = require('notice').hub() # pending objective module
+
+Hub.create 
+
+    title: 'Old Mother Goose'
+    listen: 
+        adaptor:  'socket.io'
+        port:     30201
+        secret:   '∆'
+
+    (err, omg) -> 
+
+        return err.toString() if err?
+

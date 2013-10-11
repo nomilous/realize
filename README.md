@@ -32,12 +32,12 @@ realize: (roll) ->
 
             also.pipeline([
 
-                => @notice.alert 'fell down'
-                => @notice.alert 'broke crown'
+                => @notice.event 'fell down'
+                => @notice.event 'broke crown'
 
             ]).then => 
 
-                setTimeout @Jill.tumbling, @fter
+                setTimeout @Jill.tumble, @fter
 
 
 ```

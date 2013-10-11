@@ -10,7 +10,17 @@ module.exports = connect = deferred (action, realizer) ->
     process.nextTick -> 
 
         noticeConfig = capsule: opts.capsules || {}
-        noticeConfig.capsule.event ||= {}
+
+        #
+        # realizer message bus builtin capsule types
+        # ------------------------------------------
+        # 
+        # * `notice.realize()` - realize control messages
+        # * `notice.phrase()`  - required by phrase submodule
+        #
+
+        noticeConfig.capsule.realize ||= {}
+        noticeConfig.capsule.phrase  ||= {}
 
         unless opts.connect? 
             opts.standalone = true

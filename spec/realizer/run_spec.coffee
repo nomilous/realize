@@ -10,11 +10,15 @@ describe 'run', ->
     afterEach -> 
         phrase.createRoot = @createRoot
 
+    it 'has direction', -> throw 'direction'
+    it 'has realize instead of event for control messages', -> throw 'realize'
+
     it 'is deferred', (done) -> 
 
         run
             uplink: 
                 use: ->
+                phrase: ->
             opts:
                 title: 'Title'
                 uuid:  'UUID'
@@ -45,17 +49,20 @@ describe 'run', ->
 
                 message = 
                     direction: 'out'
-                    event: 'connect'
+                    _type: 'realize'
+                    realize: 'connect'
 
                 run
                     opts:       
                         title: 'TITLE'
                         uuid:  'UUID'
                     realizerFn: ->
-                    uplink:     
-                        use: (middleware) ->  
-                            if middleware.toString().match /realizer middleware 1/
-                                middleware message, ->
+                    uplink:  
+                        phrase: -> 
+                        use: (opts, middleware) -> 
+                            if opts.title == 'realizer control switch'
+                                middleware (->), message
+
 
                 process.nextTick -> 
                     should.exist message.hostname
@@ -69,7 +76,8 @@ describe 'run', ->
 
             message = 
                 direction: 'in'
-                event: 'reject'
+                _type: 'realize'
+                realize: 'reject'
                 reason: 'REASON'
                 other: 'STUFF'
 
@@ -78,10 +86,11 @@ describe 'run', ->
                     title: 'TITLE'
                     uuid:  'UUID'
                 realizerFn: ->
-                uplink:     
-                    use: (middleware) ->  
-                        if middleware.toString().match /realizer middleware 1/
-                            middleware message, ->
+                uplink: 
+                    phrase: ->
+                    use: (opts, middleware) ->  
+                        if opts.title == 'realizer control switch'
+                            middleware (->), message
 
             .then(
                 ->
@@ -100,7 +109,8 @@ describe 'run', ->
 
             message = 
                 direction: 'in'
-                event: 'load'
+                _type: 'realize'
+                realize: 'load'
 
             phrase.createRoot = (opts, linkFn) -> -> then: -> done()
 
@@ -109,10 +119,10 @@ describe 'run', ->
                     title: 'TITLE'
                     uuid:  'UUID'
                 realizerFn: -> 
-                uplink:     
-                    use: (middleware) ->  
-                        if middleware.toString().match /realizer middleware 1/
-                            middleware message, ->
+                uplink:  
+                    use: (opts, middleware) ->  
+                        if opts.title == 'realizer control switch'
+                            middleware (->), message
 
 
 
@@ -120,7 +130,8 @@ describe 'run', ->
 
            message = 
                 direction: 'in'
-                event: 'load'
+                _type: 'realize'
+                realize: 'load'
 
             phrase.createRoot = (opts, linkFn) -> -> then: (resolve) -> resolve()
 
@@ -130,10 +141,10 @@ describe 'run', ->
                     uuid:  'UUID'
                 realizerFn: ->  
                 uplink:     
-                    use: (middleware) ->  
-                        if middleware.toString().match /realizer middleware 1/
-                            middleware message, ->
-                    event: good: (title) -> 
+                    use: (opts, middleware) ->  
+                        if opts.title == 'realizer control switch'
+                            middleware (->), message
+                    realize: (title) -> 
                         title.should.equal 'ready::1'
                         done()
 
@@ -143,7 +154,8 @@ describe 'run', ->
 
             message = 
                 direction: 'in'
-                event: 'run'
+                realize: 'run'
+                _type: 'realize'
                 uuid:  'UUUUID'
                 params: 
                     jobparameter: 1
@@ -164,9 +176,9 @@ describe 'run', ->
                     uuid:  'UUID'
                 realizerFn: ->  
                 uplink:     
-                    use: (middleware) ->  
-                        if middleware.toString().match /realizer middleware 1/
-                            middleware message, ->
+                    use: (opts, middleware) ->  
+                        if opts.title == 'realizer control switch'
+                            middleware (->), message
 
 
     context 'standalone mode (-x)', -> 

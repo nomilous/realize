@@ -139,29 +139,6 @@ describe 'configure', ->
             done()
 
 
-
-    it 'will use port from realizer.connect', (done) -> 
-
-        fs.readFile = (filename, encoding, callback) ->
-            if filename == 'missing.coffee'
-                callback null, """
-                    title: 'Title'
-                    uuid:  '1234234213123'
-                    connect: 
-                        port: 10101
-                    realize: ->
-                """
-
-        configure 
-
-            filename:  'missing.coffee'
-            connect: true
-
-        .then ({opts}) -> 
-
-            opts.connect.port.should.equal 10101
-            done()
-
     it 'will override from -p', (done) -> 
 
         fs.readFile = (filename, encoding, callback) ->
@@ -183,10 +160,7 @@ describe 'configure', ->
 
         .then ({opts}) -> 
 
-            opts.connect.port.should.equal       20202
-            opts.connect.hostname.should.equal  'localhost'
-            opts.connect.transport.should.equal 'https'
-
+            opts.connect.url.should.equal 'https://localhost:20202'
             done()
 
 
@@ -228,9 +202,8 @@ describe 'configure', ->
                     uuid:  '1234234213123'
                     connect: 
                         secret:    'x'
-                        port:      10101
-                        hostname:  'host.name'
-                        transport: 'https'
+                        adaptor:   'socket.io'
+                        url:       'https://host.name:10101'
 
                     realize: -> 'okgood'
                 """
@@ -247,10 +220,9 @@ describe 'configure', ->
                 title: 'Title'
                 uuid: '1234234213123'
                 connect: 
-                    secret: 'x'
-                    port: 10101
-                    hostname: 'host.name'
-                    transport: 'https'
+                    secret:    'x'
+                    adaptor:   'socket.io'
+                    url:       'https://host.name:10101'
 
             realizerFn().should.equal 'okgood'
 

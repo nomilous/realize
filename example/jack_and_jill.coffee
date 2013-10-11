@@ -44,9 +44,9 @@ realize: (roll) ->
                 console.log "[#{type}] #{capsule[type]}"
                 next()
 
-        @notice.use
+        # @notice.use
 
-            title: 'EavesDropper', ->
+        #     title: 'EavesDropper', ->
 
 
 
@@ -57,18 +57,16 @@ realize: (roll) ->
 
     roll 'up the hill', (to) -> 
 
-        to 'fetch a pail of water', (done, also) -> 
+        to 'fetch a pail of water', (done) -> #, also) -> 
 
-            @notice.alert 'fell down'
-            @notice.alert 'broke crown'
-            done()
+            {sequence} = require 'also'
 
-            # also.pipeline([
+            sequence([
 
-            #     => @notice.event 'fell down'
-            #     => @notice.event 'broke crown'
+                => @notice.alert 'fell down'
+                => @notice.alert 'broke crown'
 
-            # ]).then => 
+            ]).then => 
 
-            #     setTimeout @Jill.tumble, @fter
-            #     done()
+                setTimeout @Jill.tumble, @fter
+                done()

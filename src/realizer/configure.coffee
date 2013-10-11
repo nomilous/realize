@@ -75,7 +75,7 @@ module.exports = configure =
                     message: 'Realizer requires port'
                     suggest: 'use -p nnnn or realizer.connect.port'
                 ) unless port? or (
-                    object.connect? and object.connect.port? 
+                    object.connect? and object.connect.url? 
                 )
 
                 object.connect ||= {}
@@ -91,7 +91,8 @@ module.exports = configure =
 
                 transport = if https then 'https' else 'http'
                 hostname = 'localhost' unless hostname?
-                object.connect.url = "#{transport}://#{hostname || 'localhost'}:#{port}"
+                unless object.connect.url?
+                    object.connect.url = "#{transport}://#{hostname || 'localhost'}:#{port}"
                 object.connect.adaptor = 'socket.io'
 
             

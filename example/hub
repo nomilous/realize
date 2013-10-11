@@ -17,7 +17,9 @@ Hub.create
         omg.use 
 
             title: 'EavesDropper'
-            (next, capsule) -> 
+            (next, capsule, traverse) -> 
 
+
+                console.log traverse
                 console.log capsule
                 next()

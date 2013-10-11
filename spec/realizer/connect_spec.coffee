@@ -55,7 +55,11 @@ describe 'connect', ->
             uplink.lagan   .should.be.an.instanceof Function
             uplink.derelict.should.be.an.instanceof Function
 
-            uplink.event   .should.be.an.instanceof Function
+            #
+            # realize capsule built in - for control messages
+            #
+
+            uplink.realize .should.be.an.instanceof Function
             done()
 
 

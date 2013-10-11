@@ -58,74 +58,75 @@ module.exports = run = deferred (action, controls) ->
         #
 
 
-    uplink.use title: 'TODO', (msg, next) => 
+    uplink.use 
 
-        ### realizer middleware 1 ###
+        title: 'realizer control switch'
 
-        switch msg.direction
+        (next, capsule, traverse) => 
 
-            when 'out' 
-                # switch msg.event
-                #     when 'connect', 'reconnect', 'error'
-                #     else if msg.event.match /^ready::/
+            return next() unless capsule._type == 'realize'
 
-                msg.uuid     = opts.uuid
-                msg.pid      = process.pid
-                msg.hostname = hostname()
+            switch capsule.direction
 
-                console.log SENDING: msg.context, msg
-                next()
+                when 'out'
 
-            when 'in'
+                    capsule.uuid     = opts.uuid
+                    capsule.pid      = process.pid
+                    capsule.hostname = hostname()
 
-                console.log RECEIVING: msg.context, msg
-                switch msg.event
+                    console.log SENDING: capsule.realize, capsule
+                    next()
 
-                    when 'reject'
+                when 'in'
 
-                        err = error
-                            errno:   107
-                            code:    'ENO'
-                            message: msg.event
-                            detail:  {}
+                    console.log RECEIVING: capsule.realize, capsule
+                    switch capsule.realize
 
-                        err.detail[key] = msg[key] for key of msg
-                        reject err
-                        return next()
+                        when 'reject'
 
-                    when 'load'
+                            err = error
+                                errno:   107
+                                code:    'ENO'
+                                message: capsule.realize
+                                detail:  {}
 
-                        load().then(
+                            err.detail[key] = capsule[key] for key of capsule
+                            reject err
+                            return next()
 
-                            (result) -> uplink.event.good "ready::#{++readyCount}"  # , result
-                            (error)  -> 
+                        when 'load'
 
-                                payload = error: error.toString()
-                                try payload.stack = error.stack
-                                uplink.event.bad 'error', payload
+                            load().then(
 
-                            #(notify) -> console.log PHRASE_INIT_NOTIFY: notify
+                                (result) -> uplink.realize "ready::#{++readyCount}"  # , result
+                                (error)  -> 
 
-                        )
-                        return next()
+                                    payload = error: error.toString()
+                                    try payload.stack = error.stack
+                                    uplink.realize 'error', payload
 
-                    when 'run'
+                                #(notify) -> console.log PHRASE_INIT_NOTIFY: notify
 
-                        return next() unless uuid = msg.uuid
-                        job    = uuid: uuid
-                        params = msg.params || {}
+                            )
+                            return next()
 
-                        console.log RUN: uuid
-                        console.log TODO: 'job.run() with optional input of JobUUID'
-                        
-                        @token.run( job, params ).then( 
+                        when 'run'
 
-                            (result) -> console.log JOB_RESULT: result
-                            (error)  -> console.log JOB_ERROR:  error
+                            return next() unless uuid = capsule.uuid
+                            job    = uuid: uuid
+                            params = capsule.params || {}
 
-                        )
+                            console.log RUN: uuid
+                            console.log TODO: 'job.run() with optional input of JobUUID'
+                            
+                            @token.run( job, params ).then( 
 
-                        return next()
+                                (result) -> console.log JOB_RESULT: result
+                                (error)  -> console.log JOB_ERROR:  error
 
-                next()
+                            )
+
+                            return next()
+
+                    next()
 

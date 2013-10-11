@@ -24,9 +24,15 @@ module.exports = connect = deferred (action, realizer) ->
 
         unless opts.connect? 
             opts.standalone = true
+            notifier = notice( noticeConfig ).create opts.uuid
+            
+            Object.defineProperty notifier, 'realize',
+                enumerable: false
+                writable: false
+
             return resolve
                 realizerFn: realizerFn
-                uplink: notice( noticeConfig ).create opts.uuid
+                uplink: notifier
                 opts: opts
 
 
@@ -43,6 +49,10 @@ module.exports = connect = deferred (action, realizer) ->
                 errno:   err.errno || 106
                 code:    err.code || 'ENOUPLINK'
                 message: err.message
+
+            Object.defineProperty uplink, 'realize',
+                enumerable: false
+                writable: false
                 
             resolve
                 realizerFn: realizerFn

@@ -1,6 +1,6 @@
 #! /usr/bin/env coffee
 
-Hub = require('notice').hub() # pending objective module
+Hub = require('notice').hub() 
 
 Hub.create 
 
@@ -18,7 +18,6 @@ Hub.create
 
             title: 'EavesDropper'
             (next, capsule, traverse) -> 
-
 
                 console.log traverse
                 console.log capsule

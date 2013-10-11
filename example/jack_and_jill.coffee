@@ -23,31 +23,12 @@ realize: (roll) ->
 
         @notice.use
 
-            #
-            # TODO: problem here for an uplinked realizer,
-            # 
-            #       before all runs ahead of each job run
-            #       as requested by the remote objective
-            # 
-            #       this registraion will error on the second
-            #       run with: 
-            # 
-            #       notice: middleware 'EavesDropper' already exists, use the force()
-            #       
-            #       perhaps @notice.force() is an appropriate solution 
-            # 
-
             title: 'EavesDropper',
             (next, capsule) -> 
             
                 type = capsule._type
                 console.log "[#{type}] #{capsule[type]}"
                 next()
-
-        # @notice.use
-
-        #     title: 'EavesDropper', ->
-
 
 
         @notice.fetch 'Jill', (err, @Jill) => done()

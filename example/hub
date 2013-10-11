@@ -14,3 +14,10 @@ Hub.create
 
         return err.toString() if err?
 
+        omg.use 
+
+            title: 'EavesDropper'
+            (next, capsule) -> 
+
+                console.log capsule
+                next()

@@ -19,15 +19,15 @@ module.exports = connect = deferred (action, realizer) ->
                 uplink: notice( noticeConfig ).create opts.uuid
                 opts: opts
 
-        opts.connect.address = opts.connect.hostname
 
-        origin = {}
+        context = {}
         for key of opts
             continue if key == 'connect'
-            origin[key] = opts[key]
-        opts.origin = origin
+            context[key] = opts[key]
+        opts.context = context
 
-        notice.connect opts.uuid, opts, (err, uplink) -> 
+        MessageBus = notice.client noticeConfig
+        MessageBus.create opts.uuid, opts, (err, uplink) -> 
 
             if err? then return reject error 
                 errno:   err.errno || 106

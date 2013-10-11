@@ -79,15 +79,21 @@ module.exports = configure =
                 )
 
                 object.connect ||= {}
-                object.connect.port = port if port?
-                object.connect.hostname = hostname if hostname? 
-                object.connect.hostname  ||= 'localhost'
-                if https then object.connect.transport = 'https' 
-                else object.connect.transport ||= 'http' 
+                # object.connect.port = port if port?
+                # object.connect.hostname = hostname if hostname? 
+                # object.connect.hostname  ||= 'localhost'
+                # if https then object.connect.transport = 'https' 
+                # else object.connect.transport ||= 'http' 
                 if process.env.SECRET? 
                     object.connect.secret = process.env.SECRET
                 else
                     object.connect.secret ?= ''
+
+                transport = if https then 'https' else 'http'
+                hostname = 'localhost' unless hostname?
+                object.connect.url = "#{transport}://#{hostname || 'localhost'}:#{port}"
+                object.connect.adaptor = 'socket.io'
+
             
             delete object.realize
 

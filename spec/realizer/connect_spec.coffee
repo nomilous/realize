@@ -62,7 +62,11 @@ describe 'connect', ->
 
     it 'starts a connected notifier with connect spec', (done) -> 
 
-        notice.connect = (originName, opts, callback) -> 
+        notice.client = -> create: (title, opts, callback) -> 
+
+            opts.connect.should.eql 
+                adaptor: 'socket.io'
+                url: 'https://localhost:11111'
 
             callback null, 'NOTICE'
 
@@ -70,7 +74,9 @@ describe 'connect', ->
             opts: 
                 uuid:'UUID'
                 connect: 
-                    port: 10101
+                    adaptor: 'socket.io'
+                    url: 'https://localhost:11111'
+
             realizerFn: -> 'okgood'
 
         .then ({uplink, opts, realizerFn}) -> 
@@ -82,9 +88,9 @@ describe 'connect', ->
 
     it 'sets notice origin context with the realizer properties', (done) -> 
 
-        notice.connect = (originName, {origin}, callback) -> 
+        notice.client = -> create: (title, {context}, callback) -> 
 
-            origin.should.eql
+            context.should.eql
                 title: 'Title'
                 uuid: 'UUID'
                 description: 'Description'
@@ -105,7 +111,7 @@ describe 'connect', ->
 
     it 'rejects on notice connect error', (done) -> 
 
-        notice.connect = (originName, opts, callback) -> 
+        notice.client = -> create: (title, {context}, callback) -> 
 
             callback new Error 'connect error'
 

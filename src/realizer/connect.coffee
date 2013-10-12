@@ -26,7 +26,7 @@ module.exports = connect = deferred (action, realizer) ->
             opts.standalone = true
             notifier = notice( noticeConfig ).create opts.uuid
             
-            Object.defineProperty notifier, 'realize',
+            if notifier.realize? then Object.defineProperty notifier, 'realize',
                 enumerable: false
                 writable: false
 
@@ -38,6 +38,7 @@ module.exports = connect = deferred (action, realizer) ->
 
         context = {}
         for key of opts
+            continue if key == 'capsules'
             continue if key == 'connect'
             context[key] = opts[key]
         opts.context = context
@@ -50,7 +51,7 @@ module.exports = connect = deferred (action, realizer) ->
                 code:    err.code || 'ENOUPLINK'
                 message: err.message
 
-            Object.defineProperty uplink, 'realize',
+            if uplink.realize? then Object.defineProperty uplink, 'realize',
                 enumerable: false
                 writable: false
                 

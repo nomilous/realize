@@ -34,7 +34,6 @@ module.exports = run = deferred (action, controls) ->
                 (error) -> uplink.event 'error',  error
 
             )
-
             
 
     load = -> 
@@ -75,58 +74,54 @@ module.exports = run = deferred (action, controls) ->
                     capsule.hostname = hostname()
 
                     console.log SENDING: capsule.realize, capsule
-                    next()
+                    return next()
 
-                when 'in'
+                #when 'in'
 
-                    console.log RECEIVING: capsule.realize, capsule
-                    switch capsule.realize
+            switch capsule.realize
 
-                        when 'reject'
+                when 'reject'
 
-                            err = error
-                                errno:   107
-                                code:    'ENO'
-                                message: capsule.realize
-                                detail:  {}
+                    err = error
+                        errno:   107
+                        code:    'ENO'
+                        message: capsule.realize
+                        detail:  {}
 
-                            err.detail[key] = capsule[key] for key of capsule
-                            reject err
-                            return next()
+                    err.detail[key] = capsule[key] for key of capsule
+                    reject err
 
-                        when 'load'
+                when 'load'
 
-                            load().then(
+                    load().then(
 
-                                (result) -> uplink.realize "ready::#{++readyCount}"  # , result
-                                (error)  -> 
+                        (result) -> uplink.realize "ready::#{++readyCount}"  # , result
+                        (error)  -> 
 
-                                    payload = error: error.toString()
-                                    try payload.stack = error.stack
-                                    uplink.realize 'error', payload
+                            payload = error: error.toString()
+                            try payload.stack = error.stack
+                            uplink.realize 'error', payload
 
-                                #(notify) -> console.log PHRASE_INIT_NOTIFY: notify
+                        #(notify) -> console.log PHRASE_INIT_NOTIFY: notify
 
-                            )
-                            return next()
+                    )
 
-                        when 'run'
+                when 'run'
 
-                            return next() unless uuid = capsule.uuid
-                            job    = uuid: uuid
-                            params = capsule.params || {}
+                    return next() unless uuid = capsule.uuid
+                    job    = uuid: uuid
+                    params = capsule.params || {}
 
-                            console.log RUN: uuid
-                            console.log TODO: 'job.run() with optional input of JobUUID'
-                            
-                            @token.run( job, params ).then( 
+                    console.log RUN: uuid
+                    console.log TODO: 'job.run() with optional input of JobUUID'
+                    
+                    @token.run( job, params ).then( 
 
-                                (result) -> console.log JOB_RESULT: result
-                                (error)  -> console.log JOB_ERROR:  error
+                        (result) -> console.log JOB_RESULT: result
+                        (error)  -> console.log JOB_ERROR:  error
 
-                            )
+                    )
 
-                            return next()
 
-                    next()
+            next()
 

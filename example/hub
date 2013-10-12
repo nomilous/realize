@@ -1,6 +1,10 @@
 #! /usr/bin/env coffee
 
-Hub = require('notice').hub() 
+Hub = require('notice').hub 
+
+    client: 
+        capsule:
+            realize: {}
 
 Hub.create 
 
@@ -19,6 +23,35 @@ Hub.create
             title: 'EavesDropper'
             (next, capsule, traverse) -> 
 
-                console.log traverse
-                console.log capsule
+                #
+                # pretend to be objective
+                #
+
+                if capsule.control == 'start'
+
+                    setTimeout (-> 
+
+                        #
+                        # call realizer to load phrase tree
+                        #
+
+                        traverse.origin.realize 'load'
+
+                    ), 200
+                    return next()
+
+
+                if capsule.phrase == 'phrase::recurse:end'
+
+                    #
+                    # show the resulting phrase tokens
+                    #
+
+                    console.log capsule
+                    return next()
+
+
+                console.log "[#{capsule._type}] #{capsule[capsule._type]}"
+                # console.log traverse.origin
+                # console.log capsule
                 next()

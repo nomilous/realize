@@ -23,6 +23,8 @@ Hub.create
             title: 'EavesDropper'
             (next, capsule, traverse) -> 
 
+                console.log "[#{capsule._type}] #{capsule[capsule._type]}"
+
                 #
                 # pretend to be objective
                 #
@@ -44,14 +46,24 @@ Hub.create
                 if capsule.phrase == 'phrase::recurse:end'
 
                     #
-                    # show the resulting phrase tokens
+                    # realizer done loading phrase tree
                     #
 
-                    console.log capsule
+                    for path of capsule.tokens
+                        root = capsule.tokens[path].uuid
+                        break
+
+
+                    console.log "\ncalling run: #{root}\n"
+                    
+                    traverse.origin.realize 'run', 
+                        uuid: root
+                        params: 
+                            eachWaits: 1000 
+
                     return next()
 
 
-                console.log "[#{capsule._type}] #{capsule[capsule._type]}"
                 # console.log traverse.origin
                 # console.log capsule
                 next()

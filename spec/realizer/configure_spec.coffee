@@ -166,7 +166,7 @@ describe 'configure', ->
 
     it 'will override secret from environment variable', (done) -> 
 
-        process.env.SECRET = '∑'
+        process.env.NODE_SECRET = '∑'
 
         fs.readFile = (filename, encoding, callback) ->
             if filename == 'missing.coffee'
@@ -193,7 +193,7 @@ describe 'configure', ->
 
     it 'resolves with opts and realizerFn', (done) -> 
 
-        delete process.env.SECRET
+        delete process.env.NODE_SECRET
 
         fs.readFile = (filename, encoding, callback) ->
             if filename == 'missing.coffee'

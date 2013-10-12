@@ -22,11 +22,13 @@ module.exports = run = deferred (action, controls) ->
     # 
 
     opts.notice    = uplink
-    readyCount     = 0
-
     phraseRecursor = phrase.createRoot opts, (@token) => 
 
         if opts.standalone then @token.on 'ready', => 
+
+            #
+            # * standalone realizer calls a phrase run immediately
+            #
 
             @token.run( uuid: opts.uuid ).then(
 
@@ -34,7 +36,11 @@ module.exports = run = deferred (action, controls) ->
                 (error) -> uplink.event 'error',  error
 
             )
-            
+
+    #
+    # * uplinked realizer awaits instruction from the objective to
+    #   load and run the phrase tree
+    #       
 
     load = -> 
 
@@ -65,19 +71,6 @@ module.exports = run = deferred (action, controls) ->
 
             return next() unless capsule._type == 'realize'
 
-            switch capsule.direction
-
-                when 'out'
-
-                    capsule.uuid     = opts.uuid
-                    capsule.pid      = process.pid
-                    capsule.hostname = hostname()
-
-                    console.log SENDING: capsule.realize, capsule
-                    return next()
-
-                #when 'in'
-
             switch capsule.realize
 
                 when 'reject'
@@ -95,7 +88,7 @@ module.exports = run = deferred (action, controls) ->
 
                     load().then(
 
-                        (result) -> uplink.realize "ready::#{++readyCount}"  # , result
+                        (result) -> uplink.realize "ready"  # , result
                         (error)  -> 
 
                             payload = error: error.toString()

@@ -9,43 +9,23 @@ uuid:  '8a618c00-31e4-11e3-94c8-11feca0da255'
 # define additional capsules this realizer will emit
 # 
 
-capsules: 
-    fetch: {}
-    alert: {}
+capsules: fetch: {}, alert: {}
 
 realize: (roll) -> 
 
-    before 
+    before all: (done) -> 
 
-        all: (done) -> 
+        #
+        # integrated middleware message bus
+        # 
 
-            #
-            # integrated middleware message bus
-            # 
-
-            @notice.use
-
-                title: 'EavesDropper',
-                (next, capsule) -> 
-                
-                    type = capsule._type
-                    console.log "[#{type}] #{capsule[type]}"
-                    next()
-
-
-            @notice.fetch 'Jill', (err, @Jill) => done()
-            @fter = 500
-
-
-        each: (done) -> 
-
-            setTimeout done, @eachWaits
-
+        @notice.fetch 'Jill', (err, @Jill) => done()
+        @fter = 500
 
 
     roll 'up the hill', (to) -> 
 
-        to 'fetch a pail of water', (done) -> #, also) -> 
+        to 'fetch a pail of water', (done) ->
 
             {sequence} = require 'also'
 

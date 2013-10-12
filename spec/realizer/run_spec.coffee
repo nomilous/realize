@@ -43,32 +43,6 @@ describe 'run', ->
 
     context 'outbound messages', ->
 
-        context 'connect, reconnect, ready, error', -> 
-
-            it 'includes uuid, pid and hostname', (done) -> 
-
-                message = 
-                    direction: 'out'
-                    _type: 'realize'
-                    realize: 'connect'
-
-                run
-                    opts:       
-                        title: 'TITLE'
-                        uuid:  'UUID'
-                    realizerFn: ->
-                    uplink:  
-                        phrase: -> 
-                        use: (opts, middleware) -> 
-                            if opts.title == 'realizer control switch'
-                                middleware (->), message
-
-
-                process.nextTick -> 
-                    should.exist message.hostname
-                    should.exist message.uuid
-                    should.exist message.hostname
-                    done()
 
     context 'inbound messages', -> 
 
@@ -126,7 +100,7 @@ describe 'run', ->
 
 
 
-        it 'sends the ready::N on load completed', (done) -> 
+        it 'sends the ready on load completed', (done) -> 
 
            message = 
                 direction: 'in'
@@ -145,7 +119,7 @@ describe 'run', ->
                         if opts.title == 'realizer control switch'
                             middleware (->), message
                     realize: (title) -> 
-                        title.should.equal 'ready::1'
+                        title.should.equal 'ready'
                         done()
 
 

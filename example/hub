@@ -21,9 +21,12 @@ Hub.create
         omg.use 
 
             title: 'EavesDropper'
-            (next, capsule, traverse) -> 
+            (next, capsule, {origin}) -> 
 
-                console.log "[#{capsule._type}] #{capsule[capsule._type]}"
+                origin.capsuleCount ||= 0
+                origin.capsuleCount++
+                console.log "[#{capsule._type}] #{capsule[capsule._type]} (capsuleCount: #{origin.capsuleCount})"
+                
 
                 #
                 # pretend to be objective
@@ -37,9 +40,10 @@ Hub.create
                         # call realizer to load phrase tree
                         #
 
-                        traverse.origin.realize 'load'
+                        origin.realize 'load'
 
                     ), 200
+                    
                     return next()
 
 
@@ -53,17 +57,12 @@ Hub.create
                         root = capsule.tokens[path].uuid
                         break
 
-
-                    console.log "\ncalling run: #{root}\n"
-                    
-                    traverse.origin.realize 'run', 
-                        uuid: root
-                        params: 
-                            eachWaits: 1000 
+                    console.log "\ncalling run: #{root}\n"               
+                    origin.realize 'run', uuid: root
 
                     return next()
 
 
-                # console.log traverse.origin
+                # console.log origin
                 # console.log capsule
                 next()
